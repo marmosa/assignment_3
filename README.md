@@ -32,3 +32,7 @@ During this assignment, I learned how to work with arrays, objects and DOM manip
 
 I also learned how to use localStorage to save information and how to use Git through the terminal.
 
+## Links
+
+- GitHub repository: https://github.com/marmosa/assignment_3
+- Live website: https://marmosa.github.io/assignment_3/
