@@ -1,17 +1,21 @@
 console.log(songs);
+// Select DOM elements used in the application
 const songList = document.querySelector("#song-list");
 const searchInput = document.querySelector("#search-input");
 const genreFilter = document.querySelector("#genre-filter");
 const sortSelect = document.querySelector("#sort-select");
 const playlistElement = document.querySelector("#playlist");
 const totalDurationElement = document.querySelector("#total-duration");
+// Convert song duration from seconds to minutes and seconds
 function formatDuration(seconds) {
     const minutes = Math.floor(seconds/60);
     const remainingSeconds = seconds % 60;
     return `${minutes} :${String(remainingSeconds) .padStart(2, "0")}
     `;
 }
+// Load the saved playlist or start with an empty playlist
 const playlist = JSON.parse(localStorage.getItem("playlist")) || [];
+// Extract unique genres and populate the genre filter
 const genres = [...new Set(songs.map((song) => song.genre))];
 genres.forEach((genre) => {
     const option = document.createElement("option");
@@ -19,6 +23,7 @@ genres.forEach((genre) => {
     option.textContent = genre;
     genreFilter.appendChild(option);
 });
+// Render song cards and display a message if no songs match
 function renderSongs(songArray) {
     songList.innerHTML = "";
     if (songArray.length === 0) {
@@ -29,6 +34,7 @@ songArray.forEach((song) => {
     const songItem = document.createElement("div");
     songItem.classList.add("song-item");
 songItem.addEventListener("click", () => {
+    // Prevent duplicate songs from being added to the playlist
     if (!playlist.some((item) => item.id === song.id)) {
         playlist.push(song);
     }
@@ -46,6 +52,7 @@ songItem.innerHTML = `
 });
 }
 renderSongs(songs);
+// Sort songs by title, artist or duration
 sortSelect.addEventListener("change", () => {
     const sortedSongs = songs.filter((song) => {
     const searchText = searchInput.value.toLowerCase();
@@ -69,6 +76,7 @@ if (sortSelect.value === "title") {
 }
     renderSongs(sortedSongs);
 });
+// Filter songs based on the selected genre
 genreFilter.addEventListener("change", () => {
     const selectedGenre = genreFilter.value;
     const searchText = searchInput.value.toLowerCase();
@@ -91,6 +99,7 @@ if (sortSelect.value === "title") {
 }
     renderSongs(filteredSongs);
 });
+// Filter songs by title or artist as the user types
 searchInput.addEventListener("input" , () => {
     const searchText = searchInput.value.toLowerCase();
     const selectedGenre = genreFilter.value;
@@ -113,6 +122,7 @@ if (sortSelect.value === "title") {
 }
     renderSongs(filteredSongs);
 });
+// Render the playlist, update total duration and save to local storage
 function renderPlaylist() {
     playlistElement.innerHTML = "";
     if (playlist.length === 0) {
@@ -129,6 +139,7 @@ function renderPlaylist() {
         removeButton.classList.add("remove-button");
         removeButton.setAttribute("aria-label", `Remove ${song.title}`);
         playlistItem.appendChild(removeButton);
+        // Remove the selected song and update the playlist
         removeButton.addEventListener("click", () => {
     const index = playlist.indexOf(song);
     playlist.splice(index, 1);
